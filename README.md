@@ -18,6 +18,13 @@ public class Sample{
         @Group
     })
     private int id;
+
+    @Json(groups = {
+        @Group
+    })
+    private String otherField1;
+
+    private String otherField2;
 }
 ```
 
@@ -25,10 +32,12 @@ For this case, it will produce this output:
 
 ```json
 {
-  "id": integer
+  "id": integer,
+  "other_field_1": "String"
 }
 ```
 
+NOTE: by default, the fields are formatted as a snack case
 
 #### Rename key
 
@@ -77,7 +86,7 @@ output:
 }
 ```
 
-#### Specify object
+#### Specify relation
 
 
 By default, encoder only encodes sub class when it contains the JPA @Entity annotation.
@@ -99,9 +108,11 @@ public class Sample{
 output:
 ```json
 {
-  "sample1": Id of ressource
+  "sample1_id": Id of ressource
 }
 ```
+
+NOTE: When subclass is encoded, the suffix "_id" is automatically added   
 
 #### Encode object
 
