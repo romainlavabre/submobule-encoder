@@ -49,18 +49,26 @@ public class FieldParser {
 
         Object newValue;
 
-        if ( relation ) {
-            if ( isCollectionOrArray ) {
-                newValue = new ArrayList<>();
+        if ( value != null ) {
+            if ( relation ) {
+                if ( isCollectionOrArray ) {
+                    newValue = new ArrayList<>();
 
-                for ( Object subValue : ( Collection ) value ) {
-                    (( List ) newValue).add( onlyId ? getIdOfRelation( subValue ) : Encoder.encode( subValue, group ) );
+                    for ( Object subValue : ( Collection ) value ) {
+                        if ( subValue == null ) {
+                            continue;
+                        }
+                        
+                        (( List ) newValue).add( onlyId ? getIdOfRelation( subValue ) : Encoder.encode( subValue, group ) );
+                    }
+                } else {
+                    newValue = onlyId ? getIdOfRelation( value ) : Encoder.encode( value, group );
                 }
             } else {
-                newValue = onlyId ? getIdOfRelation( value ) : Encoder.encode( value, group );
+                newValue = value;
             }
         } else {
-            newValue = value;
+            newValue = null;
         }
 
 
