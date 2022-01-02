@@ -21,9 +21,14 @@ done
 
 CLASSES=(
     "$1/Encoder.java"
+    "$1/EntityParser.java"
+    "$1/FieldParser.java"
+    "$1/RowBuilder.java"
+    "$1/TypeResolver.java"
+    "$1/Formatter.java"
     "$1/put/Put.java"
     "$1/overwritter/Overwrite.java"
-    "$1/formatter/Formatter.java"
+    "$1/overwritter/DefaultOverwrite.java"
     "$1/annotation/Group.java"
     "$1/annotation/Json.java"
     "$1/annotation/JsonPut.java"

@@ -53,31 +53,6 @@ output:
 }
 ```
 
-#### Apply Formatter
-
-For know how build a custom formatter, see the section "Build Formatter"
- 
-```java
-import com.replace.replace.api.json.annotation.Group;
-import com.replace.replace.api.json.annotation.Json;
-
-public class Sample{
-
-    @Json(groups = {
-        @Group(formatter = ToUpperFormatter.class)
-    })
-    private String name;
-}
-```
-
-output:
-```json
-{
-  "name": "UPPER CASE NAME"
-}
-```
-
-
 #### Apply Overwrite
 
 For know how build a custom overwrite, see the section "Build Overwrite"
@@ -105,7 +80,8 @@ output:
 #### Specify object
 
 
-The encoder need know when take, or travel the object 
+By default, encoder only encodes sub class when it contains the JPA @Entity annotation.
+If you want to force this encoding, specify this :
  
 ```java
 import com.replace.replace.api.json.annotation.Group;
@@ -114,7 +90,7 @@ import com.replace.replace.api.json.annotation.Json;
 public class Sample{
 
     @Json(groups = {
-        @Group(object = true)
+        @Group(forceEncoding = true)
     })
     private Sample1 sample1;
 }
@@ -137,7 +113,7 @@ import com.replace.replace.api.json.annotation.Json;
 public class Sample{
 
     @Json(groups = {
-        @Group(object = true, onlyId = false)
+        @Group(onlyId = false)
     })
     private Sample1 sample1;
 }
@@ -167,7 +143,7 @@ public class Sample{
     private String name;
 
     @Json(groups = {
-        @Group(object = true, onlyId = false, ascent = true)
+        @Group(onlyId = false, ascent = true)
     })
     private Sample1 sample1;
 }
@@ -198,7 +174,7 @@ public class Sample{
     private String name;
 
     @Json(groups = {
-        @Group(object = true, onlyId = false, ascent = true),
+        @Group( onlyId = false, ascent = true),
         @Group(name = GroupType.GROUP_NAME, object = true, key = "sample1_id")
     })
     private Sample1 sample1;
@@ -247,6 +223,14 @@ public class SampleController {
 Nothing
 
 ### Versions
+
+##### 2.0.0
+
+- ADD Optimize performance
+- CHANGE automatically encodes the sub class if it contains @Entity annotation
+- ADD Default field name format is in snack case
+- CHANGE Allow injection of the Overwrite & Put class by the dependency injection container
+
 
 ##### 1.0.0
 
