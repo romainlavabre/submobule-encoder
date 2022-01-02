@@ -31,7 +31,14 @@ public class EntityParser {
         if ( fieldsParser.containsKey( group ) ) {
             for ( FieldParser fieldParser : fieldsParser.get( group ) ) {
                 FieldParser.ParsingResult parsingResult = fieldParser.parse( entity );
-                result.put( parsingResult.getKey(), parsingResult.getValue() );
+
+                if ( fieldParser.isAscent() && parsingResult.getValue() instanceof Map ) {
+                    for ( Map.Entry< String, Object > entry : (( Map< String, Object > ) parsingResult.getValue()).entrySet() ) {
+                        result.put( entry.getKey(), entry.getValue() );
+                    }
+                } else {
+                    result.put( parsingResult.getKey(), parsingResult.getValue() );
+                }
             }
         }
 
@@ -77,7 +84,7 @@ public class EntityParser {
 
 
     private List< Field > getFields() {
-        List<Field> fields = new ArrayList<>();
+        List< Field > fields = new ArrayList<>();
 
         Arrays.asList( type.getDeclaredFields() ).forEach( fields::add );
 
@@ -86,7 +93,7 @@ public class EntityParser {
         while ( superClass != null ) {
 
             Arrays.asList( superClass.getDeclaredFields() ).forEach( field -> {
-                if ( !fields.contains( field ) ){
+                if ( !fields.contains( field ) ) {
                     fields.add( field );
                 }
             } );

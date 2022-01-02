@@ -107,9 +107,8 @@ public class FieldParser {
             fieldParser.field               = field;
             fieldParser.isCollectionOrArray = TypeResolver.isArrayOrCollection( field );
 
-
             if ( group.forceEncoding()
-                    || (field.getType().getDeclaringClass() != null && field.getType().getDeclaringClass().getAnnotation( Entity.class ) != null)
+                    || (field.getType().getAnnotation( Entity.class ) != null)
                     || (Collection.class.isAssignableFrom( field.getType() ) && ((( Class< ? > ) (( ParameterizedType ) field.getGenericType()).getActualTypeArguments()[ 0 ]).isAnnotationPresent( Entity.class ))) ) {
                 fieldParser.relation = true;
             }
