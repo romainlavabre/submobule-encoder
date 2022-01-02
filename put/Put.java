@@ -3,7 +3,11 @@ package com.replace.replace.api.json.put;
 /**
  * @author Romain Lavabre <romainlavabre98@gmail.com>
  */
-public interface Put {
+public interface Put< T > {
 
-    Object build( Object object );
+    /**
+     * @param entity Subject class
+     * @return Value of putting field
+     */
+    Object build( T entity );
 }

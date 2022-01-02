@@ -5,5 +5,9 @@ package com.replace.replace.api.json.overwritter;
  */
 public interface Overwrite< T > {
 
+    /**
+     * @param data Subject class
+     * @return Value of field
+     */
     Object overwrite( T data );
 }
