@@ -5,8 +5,8 @@ import com.replace.replace.api.json.annotation.Group;
 import com.replace.replace.api.json.annotation.Json;
 import com.replace.replace.api.json.overwritter.DefaultOverwrite;
 import com.replace.replace.api.json.overwritter.Overwrite;
+import jakarta.persistence.Entity;
 
-import javax.persistence.Entity;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class FieldParser {
                         if ( subValue == null ) {
                             continue;
                         }
-                        
+
                         (( List ) newValue).add( onlyId ? getIdOfRelation( subValue ) : Encoder.encode( subValue, group ) );
                     }
                 } else {
