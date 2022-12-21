@@ -8,6 +8,8 @@ import com.replace.replace.api.json.overwritter.Overwrite;
 import jakarta.persistence.Entity;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,6 +89,16 @@ public class FieldParser {
 
 
     private Long getIdOfRelation( Object relation ) {
+        try {
+            for ( Method method : relation.getClass().getDeclaredMethods() ) {
+                if ( method.getName().equals( "get" + relationFieldId.getName().substring( 0, 1 ).toUpperCase() + relationFieldId.getName().substring( 1 ) ) && !method.isVarArgs() ) {
+                    method.setAccessible( true );
+                    return ( Long ) method.invoke( relation );
+                }
+            }
+        } catch ( IllegalAccessException | InvocationTargetException e ) {
+        }
+        
         try {
             return ( Long ) relationFieldId.get( relation );
         } catch ( IllegalAccessException e ) {
