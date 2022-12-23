@@ -34,6 +34,8 @@ public class FieldParser {
 
     private Field field;
 
+    private Method method;
+
     private boolean isCollectionOrArray;
 
     private Field relationFieldId;
@@ -42,12 +44,22 @@ public class FieldParser {
     public ParsingResult parse( Object entity ) {
         Object value;
 
-        try {
-            value = field.get( entity );
-        } catch ( IllegalAccessException e ) {
-            e.printStackTrace();
-            return ParsingResult.of( key );
+        if ( method != null ) {
+            try {
+                value = method.invoke( entity );
+            } catch ( IllegalAccessException | InvocationTargetException e ) {
+                e.printStackTrace();
+                return ParsingResult.of( key );
+            }
+        } else {
+            try {
+                value = field.get( entity );
+            } catch ( IllegalAccessException e ) {
+                e.printStackTrace();
+                return ParsingResult.of( key );
+            }
         }
+
 
         Object newValue;
 
@@ -91,14 +103,14 @@ public class FieldParser {
     private Long getIdOfRelation( Object relation ) {
         try {
             for ( Method method : relation.getClass().getDeclaredMethods() ) {
-                if ( method.getName().equals( "get" + relationFieldId.getName().substring( 0, 1 ).toUpperCase() + relationFieldId.getName().substring( 1 ) ) && !method.isVarArgs() ) {
+                if ( method.getName().equals( "get" + relationFieldId.getName().substring( 0, 1 ).toUpperCase() + relationFieldId.getName().substring( 1 ) ) && method.getParameterCount() == 0 ) {
                     method.setAccessible( true );
                     return ( Long ) method.invoke( relation );
                 }
             }
         } catch ( IllegalAccessException | InvocationTargetException e ) {
         }
-        
+
         try {
             return ( Long ) relationFieldId.get( relation );
         } catch ( IllegalAccessException e ) {
@@ -126,6 +138,13 @@ public class FieldParser {
             fieldParser.overwrite           = group.overwrite() != DefaultOverwrite.class ? container.getInstance( group.overwrite() ) : null;
             fieldParser.field               = field;
             fieldParser.isCollectionOrArray = TypeResolver.isArrayOrCollection( field );
+
+            for ( Method method : field.getDeclaringClass().getDeclaredMethods() ) {
+                if ( method.getName().equals( "get" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 ) ) && method.getParameterCount() == 0 ) {
+                    method.setAccessible( true );
+                    fieldParser.method = method;
+                }
+            }
 
             if ( group.forceEncoding()
                     || (field.getType().getAnnotation( Entity.class ) != null)
