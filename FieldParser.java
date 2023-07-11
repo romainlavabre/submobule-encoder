@@ -73,7 +73,7 @@ public class FieldParser {
                             continue;
                         }
 
-                        (( List ) newValue).add( onlyId ? getIdOfRelation( subValue ) : Encoder.encode( subValue, group ) );
+                        ( ( List ) newValue ).add( onlyId ? getIdOfRelation( subValue ) : Encoder.encode( subValue, group ) );
                     }
                 } else {
                     newValue = onlyId ? getIdOfRelation( value ) : Encoder.encode( value, group );
@@ -140,22 +140,25 @@ public class FieldParser {
             fieldParser.isCollectionOrArray = TypeResolver.isArrayOrCollection( field );
 
             for ( Method method : field.getDeclaringClass().getDeclaredMethods() ) {
-                if ( method.getName().equals( "get" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 ) ) && method.getParameterCount() == 0 ) {
+                if ( ( method.getName().equals( "get" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 ) )
+                        || method.getName().equals( "is" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 ) )
+                        || method.getName().equals( "has" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 ) ) )
+                        && method.getParameterCount() == 0 ) {
                     method.setAccessible( true );
                     fieldParser.method = method;
                 }
             }
 
             if ( group.forceEncoding()
-                    || (field.getType().getAnnotation( Entity.class ) != null)
-                    || (Collection.class.isAssignableFrom( field.getType() ) && ((( Class< ? > ) (( ParameterizedType ) field.getGenericType()).getActualTypeArguments()[ 0 ]).isAnnotationPresent( Entity.class ))) ) {
+                    || ( field.getType().getAnnotation( Entity.class ) != null )
+                    || ( Collection.class.isAssignableFrom( field.getType() ) && ( ( ( Class< ? > ) ( ( ParameterizedType ) field.getGenericType() ).getActualTypeArguments()[ 0 ] ).isAnnotationPresent( Entity.class ) ) ) ) {
                 fieldParser.relation = true;
             }
 
             if ( fieldParser.relation && group.onlyId() ) {
                 try {
                     if ( fieldParser.isCollectionOrArray ) {
-                        fieldParser.relationFieldId = (( Class< ? > ) (( ParameterizedType ) field.getGenericType()).getActualTypeArguments()[ 0 ]).getDeclaredField( "id" );
+                        fieldParser.relationFieldId = ( ( Class< ? > ) ( ( ParameterizedType ) field.getGenericType() ).getActualTypeArguments()[ 0 ] ).getDeclaredField( "id" );
                     } else {
                         fieldParser.relationFieldId = field.getType().getDeclaredField( "id" );
                     }
@@ -166,7 +169,7 @@ public class FieldParser {
                 fieldParser.relationFieldId.setAccessible( true );
             }
 
-            fieldParser.key = !group.key().isBlank() ? group.key() : (fieldParser.relation && fieldParser.onlyId ? Formatter.toSnakeCase( field.getName() ) + "_id" : Formatter.toSnakeCase( field.getName() ));
+            fieldParser.key = !group.key().isBlank() ? group.key() : ( fieldParser.relation && fieldParser.onlyId ? Formatter.toSnakeCase( field.getName() ) + "_id" : Formatter.toSnakeCase( field.getName() ) );
 
             result.add( fieldParser );
         }
