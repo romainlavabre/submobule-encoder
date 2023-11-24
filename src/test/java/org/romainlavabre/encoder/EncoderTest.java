@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.romainlavabre.encoder.config.EncoderConfigurer;
 import org.romainlavabre.encoder.config.FieldFormat;
 import org.romainlavabre.encoder.entity.Entity;
+import org.romainlavabre.encoder.entity.Parent;
 import org.romainlavabre.encoder.entity.Relation;
 import org.romainlavabre.encoder.exception.OverwriteClassNotFoundException;
 import org.romainlavabre.encoder.exception.PutClassNotFoundException;
@@ -239,5 +240,21 @@ public class EncoderTest {
         Assert.assertFalse( result.containsKey( "relation" ) );
         Assert.assertTrue( result.containsKey( "id" ) );
         Assert.assertTrue( result.containsKey( "account_number" ) );
+    }
+
+
+    @Test
+    public void test_with_sub_class() {
+        EncoderConfigurer
+                .init()
+                .setEntityAnnotationDetector( jakarta.persistence.Entity.class )
+                .setFieldFormat( FieldFormat.SNAKE_CASE )
+                .addOverwrite( new ManuallyEncodeRelation() )
+                .addPut( new PutHelloWorld() )
+                .build();
+
+        Map< String, Object > result = Encoder.encode( new Parent.Child() );
+
+        Assert.assertTrue( result.containsKey( "id" ) );
     }
 }

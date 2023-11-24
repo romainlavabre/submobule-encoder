@@ -81,7 +81,7 @@ public class Encoder {
 
         Class< ? > search;
 
-        if ( entity.getClass().getName().contains( "$" ) ) {
+        if ( entity.getClass().getName().toUpperCase().contains( "HIBERNATE_PROXY" ) ) {
             search = entity.getClass().getSuperclass();
         } else {
             search = entity.getClass();
