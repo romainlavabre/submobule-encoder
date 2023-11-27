@@ -9,11 +9,11 @@ import org.romainlavabre.encoder.annotation.Json;
 import org.romainlavabre.encoder.annotation.JsonPut;
 import org.romainlavabre.encoder.annotation.Row;
 import org.romainlavabre.encoder.overwrite.ManuallyEncodeRelation;
-import org.romainlavabre.encoder.put.PutHelloWorld;
+import org.romainlavabre.encoder.put.PutHelloWorldEntity;
 
 @JsonPut( groups = {
         @Group( name = "put", row = {
-                @Row( key = "putted_property", handler = PutHelloWorld.class )
+                @Row( key = "putted_property", handler = PutHelloWorldEntity.class )
         } )
 } )
 @jakarta.persistence.Entity
@@ -50,6 +50,7 @@ public class Entity {
             @Group( name = "relation_not_auto_detected" ),
             @Group( name = "relation_not_auto_detected_managed_manually", overwrite = ManuallyEncodeRelation.class ),
             @Group( name = "not_only_id", onlyId = false ),
+            @Group( name = "not_only_id_and_put", onlyId = false ),
             @Group( name = "merge_ascent", onlyId = false, ascent = true )
     } )
     @OneToOne

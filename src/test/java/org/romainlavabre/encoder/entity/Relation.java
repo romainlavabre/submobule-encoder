@@ -6,7 +6,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.romainlavabre.encoder.annotation.Group;
 import org.romainlavabre.encoder.annotation.Json;
+import org.romainlavabre.encoder.annotation.JsonPut;
+import org.romainlavabre.encoder.annotation.Row;
+import org.romainlavabre.encoder.put.PutHelloWorldRelation;
 
+@JsonPut( groups = {
+        @Group( name = "not_only_id_and_put", row = {
+                @Row( key = "putted_property", handler = PutHelloWorldRelation.class )
+        } )
+} )
 @Entity
 public class Relation {
 

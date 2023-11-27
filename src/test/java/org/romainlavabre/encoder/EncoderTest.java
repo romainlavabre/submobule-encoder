@@ -10,7 +10,8 @@ import org.romainlavabre.encoder.entity.Relation;
 import org.romainlavabre.encoder.exception.OverwriteClassNotFoundException;
 import org.romainlavabre.encoder.exception.PutClassNotFoundException;
 import org.romainlavabre.encoder.overwrite.ManuallyEncodeRelation;
-import org.romainlavabre.encoder.put.PutHelloWorld;
+import org.romainlavabre.encoder.put.PutHelloWorldEntity;
+import org.romainlavabre.encoder.put.PutHelloWorldRelation;
 
 import java.util.Map;
 
@@ -22,7 +23,8 @@ public class EncoderTest {
                 .init()
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -42,7 +44,8 @@ public class EncoderTest {
                 .init()
                 .setFieldFormat( FieldFormat.CAMEL_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -62,7 +65,8 @@ public class EncoderTest {
                 .init()
                 .setFieldFormat( FieldFormat.PASCAL_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -82,7 +86,8 @@ public class EncoderTest {
                 .init()
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -103,7 +108,8 @@ public class EncoderTest {
                 .setEntityAnnotationDetector( jakarta.persistence.Entity.class )
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -121,7 +127,8 @@ public class EncoderTest {
                 .init()
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -139,7 +146,8 @@ public class EncoderTest {
                 .init()
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -159,7 +167,8 @@ public class EncoderTest {
         EncoderConfigurer
                 .init()
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -174,7 +183,8 @@ public class EncoderTest {
                 .init()
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -192,6 +202,7 @@ public class EncoderTest {
                 .init()
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -207,7 +218,8 @@ public class EncoderTest {
                 .setEntityAnnotationDetector( jakarta.persistence.Entity.class )
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -223,13 +235,36 @@ public class EncoderTest {
 
 
     @Test
+    public void test_relation_not_only_id_and_with_put() {
+        EncoderConfigurer
+                .init()
+                .setEntityAnnotationDetector( jakarta.persistence.Entity.class )
+                .setFieldFormat( FieldFormat.SNAKE_CASE )
+                .addOverwrite( new ManuallyEncodeRelation() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
+                .build();
+
+        Entity entity1 = new Entity();
+        entity1.setRelation( new Relation() );
+
+        Map< String, Object > result = Encoder.encode( entity1, "not_only_id_and_put" );
+
+        Assert.assertTrue( result.containsKey( "relation" ) );
+        Assert.assertTrue( result.get( "relation" ) instanceof Map< ?, ? > );
+        Assert.assertTrue( ( ( Map< ?, ? > ) result.get( "relation" ) ).containsKey( "putted_property" ) );
+    }
+
+
+    @Test
     public void test_relation_ascent() {
         EncoderConfigurer
                 .init()
                 .setEntityAnnotationDetector( jakarta.persistence.Entity.class )
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Entity entity1 = new Entity();
@@ -250,7 +285,8 @@ public class EncoderTest {
                 .setEntityAnnotationDetector( jakarta.persistence.Entity.class )
                 .setFieldFormat( FieldFormat.SNAKE_CASE )
                 .addOverwrite( new ManuallyEncodeRelation() )
-                .addPut( new PutHelloWorld() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
                 .build();
 
         Map< String, Object > result = Encoder.encode( new Parent.Child() );
