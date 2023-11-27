@@ -21,7 +21,7 @@ public class EntityParser {
         fieldsParser = new HashMap<>();
         rowBuilders  = new HashMap<>();
         this.type    = type;
-        build( );
+        build();
     }
 
 
@@ -33,7 +33,7 @@ public class EntityParser {
                 FieldParser.ParsingResult parsingResult = fieldParser.parse( entity );
 
                 if ( fieldParser.isAscent() && parsingResult.getValue() instanceof Map ) {
-                    for ( Map.Entry< String, Object > entry : (( Map< String, Object > ) parsingResult.getValue()).entrySet() ) {
+                    for ( Map.Entry< String, Object > entry : ( ( Map< String, Object > ) parsingResult.getValue() ).entrySet() ) {
                         result.put( entry.getKey(), entry.getValue() );
                     }
                 } else {
@@ -58,7 +58,7 @@ public class EntityParser {
     }
 
 
-    private void build( ) {
+    private void build() {
         for ( Field field : getFields() ) {
             for ( FieldParser fieldParser : FieldParser.build( field ) ) {
                 if ( fieldsParser.containsKey( fieldParser.getGroup() ) ) {
