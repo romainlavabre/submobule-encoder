@@ -7,6 +7,7 @@ import org.romainlavabre.encoder.config.FieldFormat;
 import org.romainlavabre.encoder.entity.Entity;
 import org.romainlavabre.encoder.entity.Parent;
 import org.romainlavabre.encoder.entity.Relation;
+import org.romainlavabre.encoder.entity.RelationHibernate_proxy;
 import org.romainlavabre.encoder.exception.OverwriteClassNotFoundException;
 import org.romainlavabre.encoder.exception.PutClassNotFoundException;
 import org.romainlavabre.encoder.overwrite.ManuallyEncodeRelation;
@@ -246,7 +247,7 @@ public class EncoderTest {
                 .build();
 
         Entity entity1 = new Entity();
-        entity1.setRelation( new Relation() );
+        entity1.setRelation( new RelationHibernate_proxy() );
 
         Map< String, Object > result = Encoder.encode( entity1, "not_only_id_and_put" );
 
