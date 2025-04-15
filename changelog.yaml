@@ -1,3 +1,4 @@
+4.0.3: FIX FieldParser.method boolean getter resolver
 4.0.2: FIX Hibernate proxy matcher
 4.0.1: FIX Sub class encoding
 4.0.0: fairfair-cloud/roadmap#16

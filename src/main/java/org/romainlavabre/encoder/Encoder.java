@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class Encoder {
 
-    private final static List< EntityParser > entitiesParser = new ArrayList<>();
+    protected final static List< EntityParser > entitiesParser = new ArrayList<>();
 
 
     public static < T > Map< String, Object > encode( final T entity ) {

@@ -141,11 +141,29 @@ public class FieldParser {
             fieldParser.field               = field;
             fieldParser.isCollectionOrArray = TypeResolver.isArrayOrCollection( field );
 
+            String endMethodName = field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 );
+
             for ( Method method : field.getDeclaringClass().getDeclaredMethods() ) {
-                if ( method.getName().equals( "get" + field.getName().substring( 0, 1 ).toUpperCase() + field.getName().substring( 1 ) ) && method.getParameterCount() == 0 ) {
+                if ( method.getName().equals( "get" + endMethodName ) && method.getParameterCount() == 0 ) {
                     method.setAccessible( true );
                     fieldParser.method = method;
+                    continue;
                 }
+
+                if ( field.getType() == boolean.class ) {
+                    if ( method.getName().equals( "is" + endMethodName ) && method.getParameterCount() == 0 ) {
+                        method.setAccessible( true );
+                        fieldParser.method = method;
+                        continue;
+                    }
+
+                    if ( method.getName().equals( "has" + endMethodName ) && method.getParameterCount() == 0 ) {
+                        method.setAccessible( true );
+                        fieldParser.method = method;
+                        continue;
+                    }
+                }
+
             }
 
             if ( group.forceEncoding()

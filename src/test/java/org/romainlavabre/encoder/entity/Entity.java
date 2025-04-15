@@ -21,7 +21,8 @@ public class Entity {
 
     @Json( groups = {
             @Group( name = "default" ),
-            @Group( name = "rename_key", key = "id_of_entity" )
+            @Group( name = "rename_key", key = "id_of_entity" ),
+            @Group( name = "proxy" )
     } )
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -29,21 +30,34 @@ public class Entity {
 
     @Json( groups = {
             @Group( name = "default" ),
-            @Group( name = "rename_key", key = "first_name_of_entity" )
+            @Group( name = "rename_key", key = "first_name_of_entity" ),
+            @Group( name = "proxy" )
     } )
     private String firstName;
 
     @Json( groups = {
             @Group( name = "default" ),
-            @Group( name = "rename_key", key = "last_name_of_entity" )
+            @Group( name = "rename_key", key = "last_name_of_entity" ),
+            @Group( name = "proxy" )
     } )
     private String lastName;
 
     @Json( groups = {
             @Group( name = "default" ),
-            @Group( name = "rename_key", key = "age_of_person_of_entity" )
+            @Group( name = "rename_key", key = "age_of_person_of_entity" ),
+            @Group( name = "proxy" )
     } )
     private int ageOfPerson;
+
+    @Json( groups = {
+            @Group( name = "proxy" )
+    } )
+    private boolean old;
+
+    @Json( groups = {
+            @Group( name = "proxy" )
+    } )
+    private boolean money;
 
     @Json( groups = {
             @Group( name = "relation_auto_detected" ),
@@ -51,10 +65,41 @@ public class Entity {
             @Group( name = "relation_not_auto_detected_managed_manually", overwrite = ManuallyEncodeRelation.class ),
             @Group( name = "not_only_id", onlyId = false ),
             @Group( name = "not_only_id_and_put", onlyId = false ),
-            @Group( name = "merge_ascent", onlyId = false, ascent = true )
+            @Group( name = "merge_ascent", onlyId = false, ascent = true ),
+            @Group( name = "proxy" )
     } )
     @OneToOne
     private Relation relation;
+
+
+    public long getId() {
+        return id;
+    }
+
+
+    public int getAgeOfPerson() {
+        return ageOfPerson;
+    }
+
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+
+    public String getLastName() {
+        return lastName;
+    }
+
+
+    public boolean isOld() {
+        return old;
+    }
+
+
+    public Boolean hasMoney() {
+        return money;
+    }
 
 
     public Relation getRelation() {

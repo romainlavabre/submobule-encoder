@@ -4,16 +4,17 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.romainlavabre.encoder.config.EncoderConfigurer;
 import org.romainlavabre.encoder.config.FieldFormat;
-import org.romainlavabre.encoder.entity.Entity;
-import org.romainlavabre.encoder.entity.Parent;
-import org.romainlavabre.encoder.entity.Relation;
-import org.romainlavabre.encoder.entity.RelationHibernate_proxy;
+import org.romainlavabre.encoder.entity.*;
 import org.romainlavabre.encoder.exception.OverwriteClassNotFoundException;
 import org.romainlavabre.encoder.exception.PutClassNotFoundException;
 import org.romainlavabre.encoder.overwrite.ManuallyEncodeRelation;
+import org.romainlavabre.encoder.parser.EntityParser;
+import org.romainlavabre.encoder.parser.FieldParser;
 import org.romainlavabre.encoder.put.PutHelloWorldEntity;
 import org.romainlavabre.encoder.put.PutHelloWorldRelation;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Map;
 
 public class EncoderTest {
@@ -293,5 +294,42 @@ public class EncoderTest {
         Map< String, Object > result = Encoder.encode( new Parent.Child() );
 
         Assert.assertTrue( result.containsKey( "id" ) );
+    }
+
+
+    @Test
+    public void test_with_proxy_real_case_1() throws NoSuchFieldException, IllegalAccessException {
+        EncoderConfigurer
+                .init()
+                .setEntityAnnotationDetector( jakarta.persistence.Entity.class )
+                .setFieldFormat( FieldFormat.SNAKE_CASE )
+                .addOverwrite( new ManuallyEncodeRelation() )
+                .addPut( new PutHelloWorldEntity() )
+                .addPut( new PutHelloWorldRelation() )
+                .build();
+
+        Encoder.encode( new Entity$HibernateProxy$Fc8jxN2U(), "proxy" );
+
+        for ( EntityParser entityParser : Encoder.entitiesParser ) {
+            Field fieldsParser = EntityParser.class.getDeclaredField( "fieldsParser" );
+            fieldsParser.setAccessible( true );
+
+            Map< String, List< FieldParser > > fieldParsers = ( Map< String, List< FieldParser > > ) fieldsParser.get( entityParser );
+
+            for ( FieldParser fieldParser : fieldParsers.get( "proxy" ) ) {
+                Object value = getValueOfField( fieldParser, "method" );
+
+                Assert.assertNotNull( value );
+            }
+
+        }
+    }
+
+
+    private Object getValueOfField( Object obj, String fieldName ) throws NoSuchFieldException, IllegalAccessException {
+        Field field = FieldParser.class.getDeclaredField( fieldName );
+        field.setAccessible( true );
+
+        return field.get( obj );
     }
 }
