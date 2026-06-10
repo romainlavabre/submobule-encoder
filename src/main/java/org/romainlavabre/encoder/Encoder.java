@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Romain Lavabre <romainlavabre98@gmail.com>
  */
 public class Encoder {
 
-    protected final static List< EntityParser > entitiesParser = new ArrayList<>();
+    protected final static List< EntityParser > entitiesParser = new CopyOnWriteArrayList<>();
 
 
     public static < T > Map< String, Object > encode( final T entity ) {

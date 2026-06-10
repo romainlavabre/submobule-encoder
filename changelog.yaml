@@ -1,3 +1,4 @@
+4.0.4: FIX ConcurrentModificationException
 4.0.3: FIX FieldParser.method boolean getter resolver
 4.0.2: FIX Hibernate proxy matcher
 4.0.1: FIX Sub class encoding
